@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyWeather</string>
+    <string name="permissions_not_granted">Location access denied</string>
+    <string name="settings">Go to settings</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+</resources>

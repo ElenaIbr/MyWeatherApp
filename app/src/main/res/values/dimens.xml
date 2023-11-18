@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="permissions_denied_screen_icon_size">220dp</dimen>
+    <dimen name="permissions_denied_screen_text_padding">24dp</dimen>
+    <dimen name="permissions_denied_screen_spacer">24dp</dimen>
+    <dimen name="permissions_denied_button_padding">56dp</dimen>
+    <dimen name="primary_button_height">48dp</dimen>
+    <dimen name="primary_button_elevation">2dp</dimen>
+    <dimen name="primary_button_corner">8dp</dimen>
+    <dimen name="input_field_text_padding">8dp</dimen>
+    <dimen name="input_field_corner">8dp</dimen>
+    <dimen name="input_field_border">1dp</dimen>
+    <dimen name="padding">16dp</dimen>
+
+</resources>
