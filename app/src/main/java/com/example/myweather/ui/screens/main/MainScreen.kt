@@ -111,11 +111,11 @@ fun MainScreen() {
                 modifier = Modifier.height(dimensionResource(id = R.dimen.padding_16))
             )
             //list og icons
-            mainScreenState.currentWeather?.current?.weather?.forEach { weather ->
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                mainScreenState.currentWeather?.current?.weather?.forEach { weather ->
                     item {
                         AsyncImage(
                             modifier = Modifier.size(
