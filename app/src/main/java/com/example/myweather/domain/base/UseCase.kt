@@ -7,7 +7,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -58,12 +57,4 @@ abstract class SingleUseCase<in Input, out Output>(
 interface FlowUseCaseInterface<in Input, out Output> {
     fun action(input: Input): Flow<Output>
     fun execute(input: Input): Flow<Output>
-}
-
-abstract class FlowUseCase<in Input, out Output>(
-    private val dispatcher: CoroutineDispatcher
-) : FlowUseCaseInterface<Input, Output> {
-    override fun execute(input: Input): Flow<Output> {
-        return action(input).flowOn(dispatcher)
-    }
 }

@@ -8,9 +8,7 @@ import com.example.myweather.domain.models.WeatherModel
 import com.example.myweather.domain.repositories.StorageRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class StorageRepositoryImpl @Inject constructor(
@@ -28,16 +26,16 @@ class StorageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun get(): Flow<WeatherModel?> = flow {
-        try {
+    override suspend fun get(): WeatherModel? {
+        return try {
             dataStore.data.let { flow ->
                 val gson = Gson()
                 val storedWeather: String? = flow.first().let { it[PreferencesKeys.weather] }
                 val type = object : TypeToken<WeatherModel?>() {}.type
-                emit(gson.fromJson(storedWeather, type))
+                gson.fromJson(storedWeather, type)
             }
-        } catch(e: Exception) {
-            emit(null)
+        } catch (e: Exception) {
+            null
         }
     }
 }

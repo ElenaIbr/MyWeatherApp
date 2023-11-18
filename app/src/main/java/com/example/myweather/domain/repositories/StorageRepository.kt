@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface StorageRepository {
     suspend fun update(weatherModel: WeatherModel)
-    suspend fun get(): Flow<WeatherModel?>
+    suspend fun get(): WeatherModel?
 }
