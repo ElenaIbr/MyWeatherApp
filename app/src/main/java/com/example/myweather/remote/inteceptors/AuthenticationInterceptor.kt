@@ -7,8 +7,10 @@ import javax.inject.Inject
 class AuthenticationInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
-        requestBuilder.addHeader("x-access-token", "openuv-24jv0rlkliur1r-io")
-        requestBuilder.addHeader("Content-Type", "application/json")
+        val originalHttpUrl = chain.request().url
+        val url = originalHttpUrl.newBuilder()
+            .addQueryParameter("appid", "cd8eb75dc9af795cbeb5e149d4bc0438").build()
+        requestBuilder.url(url);
         return chain.proceed(requestBuilder.build())
     }
 }

@@ -9,7 +9,6 @@ interface OpenWeatherMapApi {
     suspend fun getCurrentWeather(
         @Query("lat") lat: String,
         @Query("lon") lon: String,
-        @Query("exclude") exclude: String,
-        @Query("appid") appid: String
+        @Query("exclude") exclude: String
     ): ApiNetworkResult<OpenWeatherResponse>
 }

@@ -11,7 +11,7 @@ class RemoteRepositoryImpl @Inject constructor(
     private val openWeatherMapper: OpenWeatherMapper
 ): RemoteRepository {
     override suspend fun fetchCurrentWeather(lat: String, lon: String): Resource<WeatherModel> {
-        return weatherApi.getCurrentWeather(lat, lon, "hourly,daily", "cd8eb75dc9af795cbeb5e149d4bc0438").let { response ->
+        return weatherApi.getCurrentWeather(lat, lon, "hourly,daily").let { response ->
             when (response) {
                 is ApiNetworkResult.Success -> {
                     if (response.data != null) {

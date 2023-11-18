@@ -1,6 +1,7 @@
 package com.example.myweather.di
 
 import com.example.myweather.domain.repositories.RemoteRepository
+import com.example.myweather.remote.inteceptors.AuthenticationInterceptor
 import com.example.myweather.remote.openweathermap.OpenWeatherApiFactory
 import com.example.myweather.remote.openweathermap.OpenWeatherMapApi
 import com.example.myweather.remote.openweathermap.OpenWeatherMapper
@@ -23,8 +24,14 @@ object RemoteModule {
 
     @Singleton
     @Provides
-    fun provideWeatherApi(): OpenWeatherMapApi {
-        return OpenWeatherApiFactory.createWeatherApi()
+    fun provideWeatherApi(
+        okHttpClient: OkHttpClient.Builder,
+        authenticationInterceptor: AuthenticationInterceptor
+    ): OpenWeatherMapApi {
+        return OpenWeatherApiFactory.createWeatherApi(
+            okHttpClient,
+            authenticationInterceptor
+        )
     }
 
     @Singleton
