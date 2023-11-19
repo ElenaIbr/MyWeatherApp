@@ -3,6 +3,7 @@ package com.example.myweather.ui.screens.main
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.myweather.R
@@ -55,12 +58,15 @@ fun MainScreen() {
         )
     }
 
-    if (mainScreenState.isLoading) {
+    if (mainScreenState.currentWeather == null && !mainScreenState.isLoading) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator()
+            Text(
+                text = stringResource(id = R.string.unable_get_weather),
+                style = MaterialTheme.typography.subtitle2
+            )
         }
     } else {
         Column(
@@ -73,23 +79,18 @@ fun MainScreen() {
                     end = dimensionResource(id = R.dimen.padding_16)
                 )
         ) {
-            // timezone
+            //Timezone
             mainScreenState.currentWeather?.timezone?.let { timeZone ->
                 Text(
-                    text = "${stringResource(id = R.string.time_zone)} $timeZone",
-                    style = MaterialTheme.typography.subtitle1
+                    text = stringResource(id = R.string.current),
+                    style = MaterialTheme.typography.body1,
+                    fontWeight = FontWeight.Bold
                 )
-            }
-            Spacer(
-                modifier = Modifier.height(dimensionResource(id = R.dimen.padding_8))
-            )
-            //list of weather description
-            val weatherDescription = mainScreenState.currentWeather?.current?.weather?.map {
-                "${it.description} "
-            }
-            weatherDescription?.joinToString(",")?.let { weather ->
+                Spacer(
+                    modifier = Modifier.height(dimensionResource(id = R.dimen.padding_16))
+                )
                 Text(
-                    text = "${stringResource(id = R.string.description)} $weather",
+                    text = "${stringResource(id = R.string.time_zone)} $timeZone",
                     style = MaterialTheme.typography.subtitle1
                 )
             }
@@ -110,7 +111,20 @@ fun MainScreen() {
             Spacer(
                 modifier = Modifier.height(dimensionResource(id = R.dimen.padding_16))
             )
-            //list og icons
+            //List of weather description
+            val weatherDescription = mainScreenState.currentWeather?.current?.weather?.map {
+                "${it.description} "
+            }
+            weatherDescription?.joinToString(",")?.let { weather ->
+                Text(
+                    text = "${stringResource(id = R.string.description)} $weather",
+                    style = MaterialTheme.typography.subtitle1
+                )
+            }
+            Spacer(
+                modifier = Modifier.height(dimensionResource(id = R.dimen.padding_8))
+            )
+            //List of icons
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -127,6 +141,13 @@ fun MainScreen() {
                     }
                 }
             }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        bottom = dimensionResource(id = R.dimen.padding_32)
+                    )
+            )
             PrimaryTextField(
                 label = stringResource(id = R.string.latitude),
                 value = mainScreenState.lat ?: "",
@@ -147,6 +168,7 @@ fun MainScreen() {
             Spacer(
                 modifier = Modifier.height(dimensionResource(id = R.dimen.padding_32))
             )
+            val message = stringResource(id = R.string.coordinates_needed)
             PrimaryButton(
                 text = stringResource(id = R.string.update_weather),
                 onClick = {
@@ -156,9 +178,21 @@ fun MainScreen() {
                                 lat, lon
                             )
                         }
+                    } ?: run {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     }
                 }
             )
+        }
+    }
+    if (mainScreenState.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 }

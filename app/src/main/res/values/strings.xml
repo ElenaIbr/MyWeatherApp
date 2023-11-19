@@ -6,4 +6,7 @@
     <string name="time_zone">Time zone:</string>
     <string name="description">Description:</string>
     <string name="address">Address:</string>
+    <string name="unable_get_weather">Unable to get weather</string>
+    <string name="current">Current weather</string>
+    <string name="coordinates_needed">Please input coordinates</string>
 </resources>
