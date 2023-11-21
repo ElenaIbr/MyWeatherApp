@@ -23,6 +23,9 @@ class StorageModule {
         val dataStore = PreferenceDataStoreFactory.create(
             produceFile = { context.preferencesDataStoreFile("StorageRepositoryPreferences") }
         )
-        return StorageRepositoryImpl(dataStore)
+        return StorageRepositoryImpl(
+            context,
+            dataStore
+        )
     }
 }

@@ -2,6 +2,8 @@ package com.example.myweather.di
 
 import com.example.myweather.domain.usecases.FetchWeatherUseCase
 import com.example.myweather.domain.usecases.FetchWeatherUseCaseImpl
+import com.example.myweather.domain.usecases.GetAddressByLocationUseCase
+import com.example.myweather.domain.usecases.GetAddressByLocationUseCaseImpl
 import com.example.myweather.domain.usecases.GetWeatherUseCase
 import com.example.myweather.domain.usecases.GetWeatherUseCaseImpl
 import dagger.Binds
@@ -21,4 +23,9 @@ abstract class UseCaseModule {
     abstract fun bindGetWeatherUseCase(
         getWeatherUseCase: GetWeatherUseCaseImpl
     ): GetWeatherUseCase
+
+    @Binds
+    abstract fun bindGetAddressByLocationUseCase(
+        getAddressByLocationUseCase: GetAddressByLocationUseCaseImpl
+    ): GetAddressByLocationUseCase
 }

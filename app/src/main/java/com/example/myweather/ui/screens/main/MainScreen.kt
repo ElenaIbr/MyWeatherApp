@@ -1,8 +1,5 @@
 package com.example.myweather.ui.screens.main
 
-import android.content.Context
-import android.location.Address
-import android.location.Geocoder
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +17,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,8 +35,6 @@ import com.example.myweather.ui.screens.main.components.PrimaryButton
 import com.example.myweather.ui.screens.main.components.PrimaryTextField
 import com.example.myweather.ui.screens.main.viewmodel.MainScreenViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import java.io.IOException
-import java.util.Locale
 
 @Composable
 fun MainScreen() {
@@ -56,6 +52,17 @@ fun MainScreen() {
             color = Color.White,
             darkIcons = true
         )
+    }
+
+    LaunchedEffect(
+        key1 = mainScreenState.currentWeather?.lat,
+        key2 = mainScreenState.currentWeather?.lon
+    ) {
+        mainScreenState.currentWeather?.lat?.let { lat ->
+            mainScreenState.currentWeather?.lon?.let { lon ->
+                viewModel.getAddressByLocationUseCase(lat, lon)
+            }
+        }
     }
 
     if (mainScreenState.currentWeather == null && !mainScreenState.isLoading) {
@@ -98,15 +105,11 @@ fun MainScreen() {
                 modifier = Modifier.height(dimensionResource(id = R.dimen.padding_8))
             )
             //Location by coordinates
-            mainScreenState.currentWeather?.lat?.let { lat ->
-                mainScreenState.currentWeather?.lon?.let { lon ->
-                    getAddress(lat, lon, context)?.let { address ->
-                        Text(
-                            text = "${stringResource(id = R.string.address)} $address",
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    }
-                }
+            mainScreenState.address?.let { address ->
+                Text(
+                    text = "${stringResource(id = R.string.address)} $address",
+                    style = MaterialTheme.typography.subtitle1
+                )
             }
             Spacer(
                 modifier = Modifier.height(dimensionResource(id = R.dimen.padding_16))
@@ -175,7 +178,7 @@ fun MainScreen() {
                     mainScreenState.lat?.let { lat ->
                         mainScreenState.lon?.let { lon ->
                             viewModel.fetchWeather(
-                                lat, lon
+                                lat.toDouble(), lon.toDouble()
                             )
                         }
                     } ?: run {
@@ -194,17 +197,5 @@ fun MainScreen() {
         ) {
             CircularProgressIndicator()
         }
-    }
-}
-
-private fun getAddress(lat: Double, lng: Double, context: Context): String? {
-    val geocoder = Geocoder(context, Locale.getDefault())
-    return try {
-        val addresses: List<Address>? = geocoder.getFromLocation(lat, lng, 1)
-        val obj: Address = addresses!![0]
-        "${obj.thoroughfare}, ${obj.postalCode} ${obj.subAdminArea}, ${obj.countryName}"
-    } catch (e: IOException) {
-        e.printStackTrace()
-        null
     }
 }

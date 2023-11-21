@@ -16,7 +16,7 @@ class FetchWeatherUseCaseImpl @Inject constructor(
     SingleUseCase<WeatherCoordinates, Resource<WeatherModel?>>(Dispatchers.IO) {
     override suspend fun action(input: WeatherCoordinates): Resource<WeatherModel?> {
         return when (
-            val res = remoteRepository.fetchCurrentWeather(input.lat, input.lon)
+            val res = remoteRepository.fetchCurrentWeather(input.lat.toString(), input.lon.toString())
         ) {
             is Resource.Success -> {
                 val remoteData = res.successData

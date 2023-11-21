@@ -1,5 +1,8 @@
 package com.example.myweather.storage
 
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -9,9 +12,12 @@ import com.example.myweather.domain.repositories.StorageRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.first
+import java.io.IOException
+import java.util.Locale
 import javax.inject.Inject
 
 class StorageRepositoryImpl @Inject constructor(
+    private val context: Context,
     private val dataStore: DataStore<Preferences>
 ): StorageRepository {
     private object PreferencesKeys {
@@ -35,6 +41,18 @@ class StorageRepositoryImpl @Inject constructor(
                 gson.fromJson(storedWeather, type)
             }
         } catch (e: Exception) {
+            null
+        }
+    }
+
+    override suspend fun getAddress(lat: Double, lon: Double): String? {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        return try {
+            val addresses: List<Address>? = geocoder.getFromLocation(lat, lon, 1)
+            val obj: Address = addresses!![0]
+            "${obj.thoroughfare}, ${obj.postalCode} ${obj.subAdminArea}, ${obj.countryName}"
+        } catch (e: IOException) {
+            e.printStackTrace()
             null
         }
     }
